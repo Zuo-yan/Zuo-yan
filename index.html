@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器整合包更新公告</title>
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --accent-color: #4285f4;
+            --accent-hover: #3367d6;
+            --success-color: #34a853;
+            --error-color: #ea4335;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--secondary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 图片样式 */
+        img { 
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: block;
+        }
+        
+        /* 图片容器样式 */
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .image-container img {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            height: auto;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+        }
+        
+        /* 悬停效果 */
+        img:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 图片标题 */
+        .image-caption {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* 容器样式 */
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--primary-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        /* 标题区域 */
+        .app-header {
+            background-color: var(--primary-bg);
+            text-align: center;
+            padding: 30px 25px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .app-title {
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .app-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 内容区域 */
+        .app-content {
+            padding: 30px;
+        }
+
+        /* 模块样式 */
+        .module {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .module:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .module-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .module-title::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        /* 更新列表 */
+        .update-list {
+            list-style: none;
+        }
+
+        .update-list p {
+            padding-left: 28px;
+            padding-bottom: 11px;
+            color: var(--text-secondary);
+            font-size: 1.08rem;
+        }
+
+        .update-list li {
+            position: relative;
+            padding-left: 28px;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            margin-bottom: 25px;
+        }
+
+        #onelist {
+            margin-bottom: 14px;
+        }
+
+        .update-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.4rem;
+            top: -3px;
+        }
+
+        /* 下载区域 */
+        .download-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .download-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            width: 300px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .download-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--secondary-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        .download-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .download-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .file-size {
+            display: inline-block;
+            background-color: var(--secondary-bg);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* 帮助区域 */
+        .help-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+            padding: 25px;
+            background-color: var(--secondary-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .help-content {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 600px;
+        }
+
+        .help-btn {
+            display: inline-block;
+            padding: 14px 42px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .help-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.25);
+        }
+
+        /* 页脚 */
+        .app-footer {
+            text-align: center;
+            padding: 25px;
+            background-color: var(--primary-bg);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* 版本徽章 */
+        .version-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 6px 14px;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .app-container {
+                margin: 10px;
+            }
+            
+            .app-title {
+                font-size: 2rem;
+            }
+            
+            .app-content {
+                padding: 20px 15px;
+            }
+            
+            .download-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .download-card {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .module-title {
+                font-size: 1.3rem;
+            }
+            
+            .image-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .image-container img {
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-title {
+                font-size: 1.8rem;
+            }
+            
+            .download-title {
+                font-size: 1.2rem;
+            }
+            
+            .help-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="version-badge">2.0</div>
+        
+        <div class="app-header">
+            <h1 class="app-title">服务器整合包更新公告</h1>
+            <p class="app-subtitle">由佐言最后编辑于：2025年8月2日</p>
+        </div>
+        
+        <div class="app-content">
+            <!-- 在这里添加更新内容 -->
+            <div class="module">
+                <h2 class="module-title">更新内容</h2>
+                <ul class="update-list">
+                    <li><strong>新维度</strong> - 忆域，又或者叫超平坦维度</li>
+                    <p>1. 所有玩家统一出生在忆域维度坐标为0 0的位置</p>
+                    <p>2. 忆域中的时间为永远的黄昏，并且怪物不会自然生成，是一个相对安全的世界</p>
+                    <p>3. 维度中不会生成矿物，但其地底结构为分层设计。为了方便发展<br>
+                        机械动力以及沉浸工程等科技模组，在地底放置了大量岩浆等资源</p>
+                    <p>4. 传送器会记住你在维度之间传送的位置,例如你在主世界的<br>
+                        地底传送到忆域，那么再次传送回到主世界时你依旧会在地底</p>
+                    <p>5. 这个世界中不会自然生成任何建筑，是绝对的超平坦世界</p>                    
+                    <!-- div class：用于展示多个图片 -->
+                    <div class="image-container">
+                        <img src="./static/images/server-icon.png.jpg" alt="魔法特效">
+                        <img src="./static/images/server-icon.png.jpg" alt="魔法特效">
+                        <img src="./static/images/server-icon.png.jpg" alt="魔法特效">
+                    </div>
+
+                    <!-- 宽图片 -->
+                    <li><strong>在线时间功能</strong> - 指令为：onlinetime;onlinetimenRank等</li>
+                    <p>从2.0版本算起，你现在可以用onlineTime指令查看自己以及其他玩家的在线时长了</p>
+                    <img src="./static/images/爱莉希雅.png" alt="爱莉希雅">
+
+                    <li><strong>清理掉落物倒计时</strong>现在清理掉落物之前会有倒计时了，每三分钟清理一次</li>
+                    <div class="image-container">
+                    <img src="./static/images/server-icon.png.jpg" alt="">
+                    </div>
+                    <!-- 正方形图片 -->
+                    <li><strong>植物大战僵尸模组</strong> - 将植物大战僵尸的玩法添加到了我的世界</li>
+                    <p>现在，除了火把，你可以种植植物来抵御在主世界中到处生成的怪物了</p>
+                    <img src="./static/images/server-icon.png.jpg" alt="正方形图片">
+
+                    <!-- 长图片 -->
+                    <li><strong>T.O Magic Extras</strong> - 铁魔法灾变以及Alex洞穴的附属</li>
+                    <p>我想他最让人惊艳的是为铁魔法添加了很多特效惊艳的法术（这确实是一个体量和质量都非常大的附属模组）</p>
+                    <img src="./static/images/海德里希.jpg" alt="海德里希">
+
+                    <li><strong>更丰富的钓鱼系统</strong> - 现在的钓鱼系统变得更加丰富了</li>
+                    <img src="./static/images/server-icon.png.jpg" alt="钓鱼系统">
+
+                    <li><strong>模拟殖民地</strong> - 是的，殖民地又回来了</li>
+                    <img src="./static/images/白厄.png" alt="模拟殖民地">
+
+                    <li><strong>Alex的洞穴</strong> - 相信大部分人应该听说过这个模组，对了，关于很多的模组
+                        玩法你可以看游戏当中的任务书，如果没有的话可以去 <a target="_blank" href="https://www.mcmod.cn/">MC百科</a> 查询资料</li>
+                    <img src="./static/images/server-icon.png.jpg" alt="Alex的洞穴">
+
+                    <li><strong>以及更多的更新等你探索</strong></li>
+                    <div class="image-container">
+                        <img src="./static/images/server-icon.png.jpg" alt="更多内容1">
+                        <img src="./static/images/server-icon.png.jpg" alt="更多内容2">
+                        <img src="./static/images/server-icon.png.jpg" alt="更多内容3">
+                    </div>
+                    <p class="image-caption">其他更新内容展示</p>
+                </ul>
+            </div>
+            
+            <!-- 下载模块 -->
+            <div class="module">
+                <h2 class="module-title">下载更新</h2>
+                <div class="download-section">
+                    <a href="[在这里添加网盘下载链接(括号内删除)]" class="download-card">
+                        <div class="download-icon">📦</div>
+                        <h3 class="download-title">完整安装包</h3>
+                        <p class="download-desc">包含所有组件和依赖项，适合新用户</p>
+                        <span class="file-size">？ GB</span>
+                    </a>
+                    
+                    <a href="[在这里添加网盘下载链接(括号内删除)]" class="download-card">
+                        <div class="download-icon">⚙️</div>
+                        <h3 class="download-title">增量更新包</h3>
+                        <p class="download-desc">用模组文件夹替换来更新，适合从牢玩家升级</p>
+                        <span class="file-size">？ MB</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 帮助模块 -->
+            <div class="module">
+                <h2 class="module-title">安装帮助</h2>
+                <div class="help-section">
+                    <div class="help-content">
+                        <p>不会替换MOD文件？我为您准备了详细的安装指南 <br> 以及常见问题和疑难解决办法。</p>
+                    </div>
+                    <a href="help.html" class="help-btn">查看安装指南</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-footer" style="font-size: 1.2rem;">Powered by Zuo_yan</div>
+        
+    </div>
+
+</body>
+</html>
